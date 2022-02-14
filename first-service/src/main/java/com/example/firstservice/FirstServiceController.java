@@ -1,5 +1,6 @@
 package com.example.firstservice;
 
+import com.netflix.discovery.converters.Auto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,12 @@ import java.util.Enumeration;
 @RequestMapping("/first-service")
 @Slf4j
 public class FirstServiceController {
+    Environment env;
+
+    @Autowired
+    public FirstServiceController(Environment env) {
+        this.env = env;
+    }
 
     @GetMapping("/welcome")
     public String welcome() {
@@ -29,5 +36,11 @@ public class FirstServiceController {
     public String message(@RequestHeader("first-request") String header) {
         log.info("header = " + header);
         return "Hello World in First Service";
+    }
+
+    @GetMapping("/check")
+    public String check(HttpServletRequest request) {
+        log.info("server post={}", request.getServerPort());
+        return String.format("Hi there~ 나는 첫번째 서비스야 server post %s", env.getProperty("local.server.port"));
     }
 }
