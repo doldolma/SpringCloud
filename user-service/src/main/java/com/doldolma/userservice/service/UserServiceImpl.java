@@ -3,10 +3,14 @@ package com.doldolma.userservice.service;
 import com.doldolma.userservice.dto.UserDto;
 import com.doldolma.userservice.jpa.UserEntity;
 import com.doldolma.userservice.jpa.UserRepository;
+import com.doldolma.userservice.vo.ResponseOrder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MatchingStrategy;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,5 +38,24 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userEntity);
         UserDto returnUserDto = mapper.map(userEntity, UserDto.class);
         return returnUserDto;
+    }
+
+    @Override
+    public UserDto getUserByUserId(String userId) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        if(userEntity == null){
+            throw new UsernameNotFoundException("User not found");
+        }
+        UserDto userDto = new ModelMapper().map(userEntity, UserDto.class);
+
+        List<ResponseOrder> orders = new ArrayList<>();
+        userDto.setOrders(orders);
+
+        return userDto;
+    }
+
+    @Override
+    public Iterable<UserEntity> getUserbyAll() {
+        return userRepository.findAll();
     }
 }

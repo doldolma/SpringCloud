@@ -1,6 +1,8 @@
 package com.doldolma.userservice.dto;
 
+import com.doldolma.userservice.vo.ResponseOrder;
 import java.util.Date;
+import java.util.List;
 import lombok.Data;
 
 @Data
@@ -13,4 +15,6 @@ public class UserDto {
     private Date date;
 
     private String encryptedPwd;
+
+    private List<ResponseOrder> orders;
 }
