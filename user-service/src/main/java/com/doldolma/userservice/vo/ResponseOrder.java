@@ -7,7 +7,7 @@ import lombok.Data;
 public class ResponseOrder {
     private String productId;
     private Integer qty;
-    private Integer unitPirce;
+    private Integer unitPrice;
     private Integer totalPrice;
     private Date createdAt;
 

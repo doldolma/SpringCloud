@@ -39,7 +39,10 @@ public class UserController {
 
     @GetMapping("/health_check")
     public String status() {
-        return String.format("Working Good on PORT %S", env.getProperty("local.server.port"));
+        return String.format("Working Good on  local.PORT " + env.getProperty("local.server.port")
+                + ", PORT " + env.getProperty("server.port")
+                + ", token secret " + env.getProperty("token.secret")
+                + ", token expire time " + env.getProperty("token.expiration_time"));
     }
 
     @GetMapping("/welcome")

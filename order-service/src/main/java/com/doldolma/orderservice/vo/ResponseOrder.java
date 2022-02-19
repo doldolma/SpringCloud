@@ -12,7 +12,6 @@ public class ResponseOrder {
     private String qty;
     private Integer unitPrice;
     private Integer totalPrice;
-    private Date createdAt;
 
     private String orderId;
 }

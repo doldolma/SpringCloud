@@ -1,7 +1,8 @@
-package com.doldolma.orderservice.service;
+package com.doldolma.orderservice.controller;
 
 import com.doldolma.orderservice.dto.OrderDto;
 import com.doldolma.orderservice.jpa.OrderEntity;
+import com.doldolma.orderservice.service.OrderService;
 import com.doldolma.orderservice.vo.RequestOrder;
 import com.doldolma.orderservice.vo.ResponseOrder;
 import java.util.ArrayList;

@@ -4,11 +4,16 @@ server:
 spring:
   application:
     name: user-service
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
   jpa:
     database: mysql
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/testdb?useUnicode=true&serverTimezone=Asia/Seoul
@@ -26,9 +31,19 @@ eureka:
 gateway:
   ip: 172.30.1.18
 
+logging:
+  level:
+    com.doldolma.userservice.client: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, busrefresh
+
 greeting:
   message: Welcome to the Spring Cloud
 
-token:
-  expiration_time: 86400000
-  secret: user_token
+#token:
+#  expiration_time: 86400000
+#  secret: user_token
