@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MatchingStrategy;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
@@ -33,15 +35,19 @@ public class UserServiceImpl implements UserService {
     RestTemplate restTemplate;
     Environment env;
 
+    CircuitBreakerFactory circuitBreakerFactory;
+
     OrderServiceClient orderServiceClient;
 
     public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder,
-            RestTemplate restTemplate, Environment env, OrderServiceClient orderServiceClient) {
+            RestTemplate restTemplate, Environment env, OrderServiceClient orderServiceClient ,
+        CircuitBreakerFactory circuitBreakerFactory) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.restTemplate = restTemplate;
         this.env = env;
         this.orderServiceClient = orderServiceClient;
+        this.circuitBreakerFactory = circuitBreakerFactory;
     }
 
     @Override
@@ -86,7 +92,14 @@ public class UserServiceImpl implements UserService {
 //        }
 
         // error decoder
-        List<ResponseOrder> ordersList = orderServiceClient.getOrders(userId);
+
+        // Feign
+//        List<ResponseOrder> ordersList = orderServiceClient.getOrders(userId);
+        log.info("Before call order micro service");
+        CircuitBreaker circuitbreaker = circuitBreakerFactory.create("circuitbreaker");
+        List<ResponseOrder> ordersList = circuitbreaker.run(() -> orderServiceClient.getOrders(userId),
+            throwable -> new ArrayList<>());
+        log.info("After call order micro service");
         userDto.setOrders(ordersList);
 
         return userDto;

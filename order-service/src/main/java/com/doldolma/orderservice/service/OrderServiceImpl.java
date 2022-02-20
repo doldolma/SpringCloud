@@ -4,12 +4,14 @@ import com.doldolma.orderservice.dto.OrderDto;
 import com.doldolma.orderservice.jpa.OrderEntity;
 import com.doldolma.orderservice.jpa.OrderRepository;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 @Service
+@Slf4j
 public class OrderServiceImpl implements OrderService{
     private OrderRepository orderRepository;
 

@@ -6,6 +6,7 @@ import com.doldolma.userservice.service.UserService;
 import com.doldolma.userservice.vo.Greeting;
 import com.doldolma.userservice.vo.RequestUser;
 import com.doldolma.userservice.vo.ResponseUser;
+import io.micrometer.core.annotation.Timed;
 import java.util.ArrayList;
 import java.util.List;
 import org.modelmapper.ModelMapper;
@@ -38,6 +39,7 @@ public class UserController {
     }
 
     @GetMapping("/health_check")
+    @Timed(value="users.status", longTask = true)
     public String status() {
         return String.format("Working Good on  local.PORT " + env.getProperty("local.server.port")
                 + ", PORT " + env.getProperty("server.port")
@@ -46,6 +48,7 @@ public class UserController {
     }
 
     @GetMapping("/welcome")
+    @Timed(value="users.welcome", longTask = true)
     public String greeting() {
 //        return env.getProperty("greeting.message");
         return greeting.getMessage();
